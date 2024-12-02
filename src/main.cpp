@@ -1,20 +1,17 @@
 #include <iostream>
-#include "nodo.h"
+#include "arbol_binario.h"
+#include "utils.h"
 using namespace std;
 
 int main() {
-    // Crear un nodo de prueba
-    Nodo* rey = new Nodo(1, "Juan", "Primero", 'H', 68, 0, false, true, true);
+    ArbolBinario arbol;
 
-    // Mostrar datos del nodo
-    cout << "Rey: " << rey->getName() << " " << rey->getLastName() << endl;
-    cout << "Es rey actual: " << (rey->getIsKing() ? "Si" : "No") << endl;
+    // Cargar nodos desde el archivo sucesion.csv
+    cargarDesdeCSV("bin/sucesion.csv", arbol);
 
-    // Modificar datos
-    rey->setAge(69);
-    cout << "Edad actualizada: " << rey->getAge() << endl;
+    // Mostrar el arbol cargado
+    cout << "Arbol cargado desde CSV en preorden:" << endl;
+    arbol.mostrarArbol();
 
-    // Liberar memoria
-    delete rey;
     return 0;
 }
