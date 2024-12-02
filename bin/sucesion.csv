@@ -1,0 +1,6 @@
+id,name,last_name,gender,age,id_father,is_dead,was_king,is_king
+1,Juan,Primero,H,68,0,0,1,1
+2,Carlos,Primero,H,45,1,0,0,0
+3,Ana,Primera,M,42,1,0,0,0
+4,Luis,Segundo,H,25,2,0,0,0
+5,Marta,Tercera,M,22,3,0,0,0
