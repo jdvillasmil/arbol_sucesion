@@ -78,7 +78,7 @@ Nodo* ArbolBinario::buscarNodo(int id) {
 // Mostrar el árbol completo (Preorden)
 void ArbolBinario::mostrarArbol() {
     if (raiz == nullptr) {
-        cout << "El árbol está vacío." << endl;
+        cout << "El arbol esta vacio." << endl;
     } else {
         imprimirPreorden(raiz);
     }
@@ -93,7 +93,120 @@ void ArbolBinario::imprimirPreorden(Nodo* nodo) {
     }
 }
 
-// Getter para obtener la raíz
-Nodo* ArbolBinario::getRaiz() {
-    return raiz;
+// Mostrar la linea de sucesion (solo nodos vivos)
+void ArbolBinario::mostrarLineaSucesion() {
+    if (raiz == nullptr) {
+        cout << "No hay linea de sucesion, el arbol esta vacio." << endl;
+    } else {
+        cout << "Linea de sucesion actual:" << endl;
+        imprimirLineaSucesion(raiz);
+    }
+}
+
+// Recorrido preorden filtrando nodos vivos
+void ArbolBinario::imprimirLineaSucesion(Nodo* nodo) {
+    if (nodo != nullptr) {
+        if (!nodo->getIsDead()) { // Solo imprimir si el nodo esta vivo
+            cout << nodo->getName() << " " << nodo->getLastName() << endl;
+        }
+        imprimirLineaSucesion(nodo->getHijoIzquierdo());
+        imprimirLineaSucesion(nodo->getHijoDerecho());
+    }
+}
+
+// Reasignar automaticamente al nuevo rey
+bool ArbolBinario::reasignarRey() {
+    if (raiz == nullptr) {
+        cout << "No hay rey actual, el arbol esta vacio." << endl;
+        return false;
+    }
+
+    if (raiz->getIsDead()) {
+        Nodo* nuevoRey = encontrarRey(raiz);
+        if (nuevoRey != nullptr) {
+            raiz->setIsKing(false); // Eliminar al rey actual
+            nuevoRey->setIsKing(true);
+            cout << "El nuevo rey es: " << nuevoRey->getName() << " " << nuevoRey->getLastName() << endl;
+            return true;
+        } else {
+            cout << "No se encontro un sucesor vivo para el rey." << endl;
+            return false;
+        }
+    }
+
+    cout << "El rey actual aun esta vivo: " << raiz->getName() << endl;
+    return true;
+}
+
+// Encontrar el nuevo rey (recursivo)
+Nodo* ArbolBinario::encontrarRey(Nodo* nodo) {
+    if (nodo == nullptr) return nullptr;
+
+    // Si el nodo esta vivo, es el nuevo rey
+    if (!nodo->getIsDead()) {
+        return nodo;
+    }
+
+    // Buscar en el hijo primogenito
+    Nodo* posibleRey = encontrarRey(nodo->getHijoIzquierdo());
+    if (posibleRey != nullptr) return posibleRey;
+
+    // Buscar en el segundo hijo
+    return encontrarRey(nodo->getHijoDerecho());
+}
+
+// Modificar datos de un nodo por ID
+void ArbolBinario::modificarNodo(int id) {
+    Nodo* nodo = buscarNodo(id); // Buscar el nodo por su ID
+    if (nodo == nullptr) {
+        cout << "Nodo con ID " << id << " no encontrado." << endl;
+        return;
+    }
+
+    // Mostrar datos actuales del nodo
+    cout << "Datos actuales del nodo:" << endl;
+    cout << "Nombre: " << nodo->getName() << endl;
+    cout << "Apellido: " << nodo->getLastName() << endl;
+    cout << "Genero: " << nodo->getGender() << endl;
+    cout << "Edad: " << nodo->getAge() << endl;
+    cout << "¿Muerto?: " << (nodo->getIsDead() ? "Si" : "No") << endl;
+
+    // Solicitar nuevos datos
+    string nuevoNombre, nuevoApellido;
+    char nuevoGenero;
+    int nuevaEdad;
+    bool estaMuerto;
+
+    cout << "\nIngrese los nuevos datos (deje vacio para no cambiar):" << endl;
+
+    // Nombre
+    cout << "Nuevo nombre: ";
+    getline(cin, nuevoNombre);
+    if (!nuevoNombre.empty()) {
+        nodo->setName(nuevoNombre);
+    }
+
+    // Apellido
+    cout << "Nuevo apellido: ";
+    getline(cin, nuevoApellido);
+    if (!nuevoApellido.empty()) {
+        nodo->setLastName(nuevoApellido);
+    }
+
+    // Genero
+    cout << "Nuevo genero (H/M): ";
+    cin >> nuevoGenero;
+    nodo->setGender(nuevoGenero);
+
+    // Edad
+    cout << "Nueva edad: ";
+    cin >> nuevaEdad;
+    nodo->setAge(nuevaEdad);
+
+    // ¿Muerto?
+    cout << "¿Esta muerto? (1 = Si, 0 = No): ";
+    cin >> estaMuerto;
+    nodo->setIsDead(estaMuerto);
+
+    cout << "Los datos del nodo han sido actualizados." << endl;
 }
